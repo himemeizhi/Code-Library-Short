@@ -1,84 +1,70 @@
-#include <cstdio>
-/*
-   Lucas 快速求解C(n,m)%p
-   */
-void gcd(int n,int k,int &x,int &y)
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+
+int mod;
+long long num[100000];
+int ni[100],mi[100];
+int len;
+
+void init(int p)
 {
-    if(k)
-    {
-        gcd(k,n%k,x,y);
-        int t=x;
-        x=y;
-        y=t-(n/k)*y;
-        return;
-    }
-    x=1;
-    y=0;
+    mod=p;
+    num[0]=1;
+    for (int i=1; i<p; i++)
+        num[i]=i*num[i-1]%p;
 }
 
-int CmodP(int n,int k,int p)
+void get(int n,int ni[],int p)
 {
-    if(k>n) 
-        return 0;
-    int a,b,flag=0,x,y;
-    a=b=1;
-    for(int i=1;i<=k;i++)
+    for (int i = 0; i < 100; i++)
+        ni[i] = 0;
+    int tlen = 0;
+    while (n != 0)
     {
-        x=n-i+1;
-        y=i;
-        while(x%p==0)
-        {
-            x/=p;
-            ++flag;
-        }
-        while(y%p==0)
-        {
-            y/=p;
-            --flag;
-        }
-        x%=p;
-        y%=p;
-
-        a*=x;
-        b*=y;
-
-        b%=p;
-        a%=p;
+        ni[tlen++] = n%p;
+        n /= p;
     }
-    if(flag)
-        return 0;
-    gcd(b,p,x,y);
-    if(x<0)
-        x+=p;
-    a*=x;
-    a%=p;
-    return a;
+    len = tlen;
 }
 
-//用Lucas 定理求解 C(n,m) % p ,p 是素数
-long long Lucas(long long n, long long m, long long p)
+long long power(long long x,long long y)
 {
+    long long ret=1;
+    for (long long a=x%mod; y; y>>=1,a=a*a%mod)
+        if (y&1)
+            ret=ret*a%mod;
+    return ret;
+}
+
+long long getInv(long long x)//`mod为素数`
+{
+    return power(x,mod-2);
+}
+
+long long calc(int n,int m,int p)//C(n,m)%p
+{
+    init(p);
     long long ans=1;
-    while(m && n && ans)
+    for (; n && m && ans; n/=p,m/=p)
     {
-        ans*=(CmodP(n%p,m%p,p));
-        ans=ans%p;
-        n=n/p;
-        m=m/p;
+        if (n%p>=m%p)
+            ans = ans*num[n%p]%p *getInv(num[m%p]%p)%p *getInv(num[n%p-m%p])%p;
+        else
+            ans=0;
     }
     return ans;
 }
+
 int main()
 {
-    long long n,k,p,ans;
-    int cas=0;
-    while(scanf("%I64d%I64d%I64d",&n,&k,&p)!=EOF)
+    int t;
+    scanf("%d",&t);
+    while (t--)
     {
-        if(k>n-k)
-            k=n-k;
-        ans=Lucas(n+1,k,p)+n-k;
-        printf("Case #%d: %I64d\n",++cas,ans%p);
+        int n,m,p;
+        scanf("%d%d%d",&n,&m,&p);
+        printf("%lld\n",calc(n+m,m,p));
     }
     return 0;
 }
-

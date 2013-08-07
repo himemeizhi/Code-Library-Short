@@ -13,10 +13,6 @@ template<class Tp>class sbt
         {
             del(rt,a);
         }
-        inline bool find(const Tp &a)
-        {
-            return find(rt,a);
-        }
         inline Tp pred(const Tp &a)
         {
             return pred(rt,a);
@@ -25,29 +21,9 @@ template<class Tp>class sbt
         {
             return succ(rt,a);
         }
-        inline bool empty()
-        {
-            return !sz[rt];
-        }
-        inline Tp min()
-        {
-            return min(rt);
-        }
-        inline Tp max()
-        {
-            return max(rt);
-        }
         inline void delsmall(const Tp &a)
         {
             dels(rt,a);
-        }
-        inline int rank(const Tp &a)
-        {
-            return rank(rt,a);
-        }
-        inline Tp sel(const int &a)
-        {
-            return sel(rt,a);
         }
         inline Tp delsel(int a)
         {
@@ -140,57 +116,6 @@ template<class Tp>class sbt
                 else
                     return del(r[pos],a);
         }
-        bool find(int &pos,const Tp &a)
-        {
-            if(!pos)
-                return false;
-            if(a<val[pos])
-                return find(l[pos],a);
-            else
-                return (val[pos]==a || find(r[pos],a));
-        }
-        Tp pred(int &pos,const Tp &a)
-        {
-            if(!pos)
-                return a;
-            if(a>val[pos])
-            {
-                Tp ret(pred(r[pos],a));
-                if(ret==a)
-                    return val[pos];
-                else
-                    return ret;
-            }
-            return pred(l[pos],a);
-        }
-        Tp succ(int &pos,const Tp &a)
-        {
-            if(!pos)
-                return a;
-            if(a<val[pos])
-            {
-                Tp ret(succ(l[pos],a));
-                if(ret==a)
-                    return val[pos];
-                else
-                    return ret;
-            }
-            return succ(r[pos],a);
-        }
-        Tp min(int &pos)
-        {
-            if(l[pos])
-                return min(l[pos]);
-            else
-                return val[pos];
-        }
-        Tp max(int &pos)
-        {
-            if(r[pos])
-                return max(r[pos]);
-            else
-                return val[pos];
-        }
         void dels(int &pos,const Tp &v)
         {
             if(!pos)
@@ -203,22 +128,6 @@ template<class Tp>class sbt
             }
             dels(l[pos],v);
             sz[pos]=1+sz[l[pos]]+sz[r[pos]];
-        }
-        int rank(const int &pos,const Tp &v)
-        {
-            if(val[pos]==v)
-                return sz[l[pos]]+1;
-            if(v<val[pos])
-                return rank(l[pos],v);
-            return rank(r[pos],v)+sz[l[pos]]+1;
-        }
-        Tp sel(const int &pos,const int &v)
-        {
-            if(sz[l[pos]]+1==v)
-                return val[pos];
-            if(v>sz[l[pos]])
-                return sel(r[pos],v-sz[l[pos]]-1);
-            return sel(l[pos],v);
         }
         Tp delsel(int &pos,int k)
         {

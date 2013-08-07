@@ -51,18 +51,6 @@ class Treap
             delete pos;
         }
     }
-    inline int sel(node *pos,int k)
-    {
-        while(pos->ch[0]->sz+1!=k)
-            if(pos->ch[0]->sz>=k)
-                pos=pos->ch[0];
-            else
-            {
-                k-=pos->ch[0]->sz+1;
-                pos=pos->ch[1];
-            }
-        return pos->val;
-    }
     void del(node *&pos,int val)
     {
         if(pos!=null)
@@ -97,19 +85,9 @@ class Treap
         rec(rt);
         rt=null;
     }
-    inline int sel(int k)
-    {
-        if(k<1 || k>rt->sz)
-            return 0;
-        return sel(rt,rt->sz+1-k);
-    }
     inline void del(int val)
     {
         del(rt,val);
-    }
-    inline int size()
-    {
-        return rt->sz;
     }
 }treap[MAXX];
 

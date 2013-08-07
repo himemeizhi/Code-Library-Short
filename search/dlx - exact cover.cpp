@@ -124,13 +124,11 @@ using namespace std;
 
 int l[M], r[M], d[M], u[M], col[M], row[M], h[M], res[N], cntcol[N];
 int dcnt = 0;
-//初始化一个节点
 inline void addnode(int &x)
 {
     ++x;
     r[x] = l[x] = u[x] = d[x] = x;
 }
-//将x加入到rowx后
 inline void insert_row(int rowx, int x)
 {
     r[l[rowx]] = x;
@@ -138,7 +136,6 @@ inline void insert_row(int rowx, int x)
     r[x] = rowx;
     l[rowx] = x;
 }
-//将x加入到colx后
 inline void insert_col(int colx, int x)
 {
     d[u[colx]] = x;
@@ -146,7 +143,6 @@ inline void insert_col(int colx, int x)
     d[x] = colx;
     u[colx] = x;
 }
-//全局初始化
 inline void dlx_init(int cols)
 {
     memset(h, -1, sizeof(h));
@@ -159,7 +155,6 @@ inline void dlx_init(int cols)
         insert_row(0, dcnt);
     }
 }
-//删除一列以及相关的所有行
 inline void remove(int c)
 {
     l[r[c]] = l[c];
@@ -172,7 +167,6 @@ inline void remove(int c)
             cntcol[col[j]]--;
         }
 }
-//恢复一列以及相关的所有行
 inline void resume(int c)
 {
     for (int i = u[c]; i != c; i = u[i])
@@ -185,7 +179,6 @@ inline void resume(int c)
     l[r[c]] = c;
     r[l[c]] = c;
 }
-//搜索部分
 bool DLX(int deep)
 {
     if (r[0] == 0)
